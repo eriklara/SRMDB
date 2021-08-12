@@ -262,6 +262,7 @@ CREATE TABLE `hr_employee` (
   `id` int NOT NULL AUTO_INCREMENT,
   `full_name` varchar(250) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
   `number_employee` varchar(45) DEFAULT NULL,
+  `seller_number` varchar(50) NOT NULL,
   `user_id` int NOT NULL,
   `status` varchar(3) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `company_id` int NOT NULL,
@@ -1164,17 +1165,19 @@ CREATE TABLE `res_user` (
   `user_name` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
   `position` varchar(50) NOT NULL,
-  `seller_number` varchar(50) DEFAULT NULL,
   `status` varchar(10) NOT NULL,
   `update_date` datetime NOT NULL,
   `create_date` datetime NOT NULL,
   `store_id` int DEFAULT NULL,
   `address_id` int DEFAULT NULL,
   `create_uid` int DEFAULT NULL,
+  `company_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `res_user_store_id_index` (`store_id`),
   KEY `res_user_address_id_index` (`address_id`),
-  KEY `res_user_create_uid_index` (`create_uid`)
+  KEY `res_user_create_uid_index` (`create_uid`) /*!80000 INVISIBLE */,
+  KEY `res_user_company_id_fkey_idx` (`company_id`),
+  CONSTRAINT `res_user_company_id_fkey` FOREIGN KEY (`company_id`) REFERENCES `res_company` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1184,7 +1187,7 @@ CREATE TABLE `res_user` (
 
 LOCK TABLES `res_user` WRITE;
 /*!40000 ALTER TABLE `res_user` DISABLE KEYS */;
-INSERT INTO `res_user` VALUES (1,'SRM','AD','SRM','SRM','SRM','SRM','SRM','SRM','A','2021-08-05 00:00:00','2021-07-12 00:00:00',NULL,NULL,NULL);
+INSERT INTO `res_user` VALUES (1,'SRM','AD','SRM','SRM','SRM','SRM','SRM','A','2021-08-05 00:00:00','2021-07-12 00:00:00',NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `res_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2401,6 +2404,75 @@ UNLOCK TABLES;
 --
 -- Dumping routines for database 'srmdbv17'
 --
+/*!50003 DROP PROCEDURE IF EXISTS `SPCREATEUSER` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SPCREATEUSER`(
+    OUT puser_id INT,
+    IN pname varchar(100), 
+	IN pprofile varchar(2), 
+	IN plast_name varchar(100), 
+	IN psur_name varchar(100), 
+	IN puser_name varchar(50), 
+	IN ppassword varchar(50),
+    IN pposition varchar(50),
+	IN pstatus varchar(10), 
+	IN pstore_id int, 
+	IN paddress_id int, 
+	IN pcreate_uid int,
+    OUT pResult INT
+)
+BEGIN
+
+	INSERT INTO `srmdbv17`.`res_user`
+	(
+		`name`,
+		`profile`,
+		`last_name`,
+		`sur_name`,
+		`user_name`,
+		`password`,
+		`position`,
+		`seller_number`,
+		`status`,
+		`update_date`,
+		`create_date`,
+		`store_id`,
+		`address_id`,
+		`create_uid`
+    )
+	VALUES
+	(
+		pname,
+		pprofile,
+		plast_name,
+		psur_name,
+		puser_name,
+		ppassword,
+		pposition,
+		pseller_number,
+		pstatus,
+		curdate(),
+		curdate(),
+		pstore_id,
+		paddress_id,
+		pcreate_uid
+    );
+    
+    SET pResult = 1;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `SPDELETECUSTOMER` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -2413,9 +2485,36 @@ UNLOCK TABLES;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SPDELETECUSTOMER`(IN pcustomer_id INT)
 BEGIN
-	UPDATE `srmdbv3`.`crm_customer`
+	UPDATE `srmdbv17`.`crm_customer`
 	SET  STATUS = 'B'
     WHERE id = pcustomer_id;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `SPDELETEUSER` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SPDELETEUSER`(
+	IN puser_id INT, 
+    OUT pResult INT
+)
+BEGIN
+	UPDATE `srmdbv17`.`crm_customer`
+	   SET STATUS  = 'B',
+       UPDATE_DATE = CURDATE()
+	WHERE id = puser_id;
+	
+    SET pResult = 1;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -2433,10 +2532,10 @@ DELIMITER ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SPGETCUSTOMERBYID`( 
-  IN pcustomer_id INT,
-  IN pstatus      varchar(3),
-  IN pendingdate  date,
-  IN pstartdate   date,
+  IN pcustomer_id  INT,
+  IN pstatus       varchar(3),
+  IN pendingdate   date,
+  IN pstartdate    date,
   IN pcustomer_key varchar(45),
   IN pname         varchar(50),
   IN plast_name    varchar(50)
@@ -2491,15 +2590,133 @@ BEGIN
            USR.profile         user_profile,
            USC.id              user_code_id,
            USC.user_name       customer_user_name
-	 FROM `srmdbv16`.`crm_customer` CUS
-	INNER JOIN  `srmdbv16`.`res_address` ADS ON CUS.address_id   = ADS.id
-    INNER JOIN  `srmdbv16`.`sale_card`   CAR ON CUS.card_id      = CAR.id 
-    INNER JOIN  `srmdbv16`.`res_store`   STO ON CUS.store_id     = STO.id
-    INNER JOIN  `srmdbv16`.`res_user`    USR ON CUS.create_uid   = USR.id
-    INNER JOIN  `srmdbv16`.`res_user`    USC ON CUS.user_code_id = USC.id
+	 FROM `srmdbv17`.`crm_customer` CUS
+	INNER JOIN  `srmdbv17`.`res_address` ADS ON CUS.address_id   = ADS.id
+    INNER JOIN  `srmdbv17`.`sale_card`   CAR ON CUS.card_id      = CAR.id 
+    INNER JOIN  `srmdbv17`.`res_store`   STO ON CUS.store_id     = STO.id
+    INNER JOIN  `srmdbv17`.`res_user`    USR ON CUS.create_uid   = USR.id
+    INNER JOIN  `srmdbv17`.`res_user`    USC ON CUS.user_code_id = USC.id
 	WHERE CUS.id = pcustomer_id
       AND CUS.status = pstatus;
 
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `SPGETUSER` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SPGETUSER`(
+  IN puser_id      INT,
+  IN pname         varchar(50),
+  IN plast_name    varchar(100),
+  IN psur_name     varchar(100),
+  IN puser_name    varchar(45),
+  IN pposition     varchar(50),
+  IN pstatus       varchar(3),
+  IN pending_date  date,
+  IN pstart_date   date,
+  IN pdate_type    varchar(2),
+  IN pcompany_id   INT 
+)
+BEGIN
+   
+   DECLARE ValidateCompany INT DEFAULT 0;
+
+   -- Creation:   06-08-2021   --
+   -- Developer:  Erik Reynoso --
+   -- Date:       06-08-2021   --
+   -- Descriptio: Obtiene los datos de un usuario filtrado por todos los datos --
+
+	SELECT USR.id, 
+		   USR.name, 
+           USR.profile, 
+           USR.last_name, 
+           USR.sur_name, 
+           USR.user_name,
+           USR.password,
+           USR.position, 
+           USR.status,
+		   USR.update_date,
+		   USR.create_date,
+           ADS.id              address_id,
+           ADS.name            address_name,
+           ADS.postal_code     address_postal_Code,
+           ADS.address_format  address_format,
+           ADS.address_view_id  address_view_id,
+           ADS.phone_code      address_phone_code,
+           ADS.name_position   address_name_position,
+           ADS.state_required  address_state_required,
+           ADS.region          address_region,
+           ADS.city            address_city,
+           ADS.description     address_description,
+           ADS.create_date     address_create_date,
+           STO.id              store_id,
+           STO.name            store_name,
+           CUS.id              create_uid,
+           CUS.name            user_name,
+           CUS.status          user_status,
+           CUS.profile         user_profile
+	 FROM `srmdbv17`.`res_user` USR
+	LEFT JOIN `srmdbv17`.`res_address` ADS ON USR.address_id = ADS.id
+    LEFT JOIN `srmdbv17`.`res_store`   STO ON USR.store_id   = STO.id
+    LEFT JOIN `srmdbv17`.`res_user`    CUS ON USR.create_uid = CUS.id
+	WHERE (
+			puser_id IS NULL Or
+			USR.id = puser_id
+		  ) 
+      AND (
+            plast_name IS NULL Or
+			USR.last_name LIKE concat('%', plast_name, '%')
+		  )
+	  AND (	
+            psur_name IS NULL Or
+		    USR.sur_name LIKE concat('%', psur_name, '%')
+          )
+	  AND (
+            puser_name IS NULL Or
+            USR.user_name = puser_name
+          )
+	  AND (
+            pposition IS NULL Or
+            USR.position = pposition
+          )
+	  AND (
+            pstatus IS NULL Or
+            USR.status = pstatus
+          )
+	  AND (
+			pname IS NULL Or
+            USR.name LIKE concat('%', pname, '%')
+          )
+	  AND ( pdate_type IS NULL Or
+			(
+ 	         (
+               pdate_type = 'C'                           And
+			   DATE(USR.create_date) >= DATE(pstart_date) And
+               DATE(USR.create_date) <= DATE(pending_date)
+		     )
+             Or
+ 	         ( 
+				pdate_type = 'U'                           And
+				DATE(USR.update_date) >= DATE(pstart_date) And
+				DATE(USR.update_date) <= DATE(pending_date)
+			)
+		  )
+          )
+	  AND (
+            pcompany_id = ValidateCompany Or 
+            USR.company_id = pcompany_id
+          );
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -2536,7 +2753,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SPUPDATECUSTOMER`(
 )
 BEGIN
 
-	UPDATE `srmdbv16`.`crm_customer`
+	UPDATE `srmdbv17`.`crm_customer`
 	SET
 		name            = pname,
 		last_name       = plast_name,
@@ -2563,6 +2780,52 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `SPUPDATEUSER` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SPUPDATEUSER`(
+    IN puser_id INT,
+    IN pname varchar(100), 
+	IN pprofile varchar(2), 
+	IN plast_name varchar(100), 
+	IN psur_name varchar(100), 
+	IN puser_name varchar(50), 
+	IN ppassword varchar(50),
+    IN pposition varchar(50), 
+	IN pstatus varchar(10), 
+    OUT pResult INT
+)
+BEGIN
+
+    UPDATE `srmdbv17`.`res_user`
+	SET
+	`name`          = pname,
+	`profile`       = pprofile,
+	`last_name`     = plast_name,
+	`sur_name`      = psur_name,
+	`user_name`     = puser_name,
+	`password`      = ppassword,
+	`position`      = pposition,
+	`seller_number` = pseller_number,
+	`status`        = pstatus,
+	`update_date`   = CURDATE()
+	WHERE `id` = 1;
+
+    SET pResult = 1;
+    
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -2573,4 +2836,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-08-05  0:27:21
+-- Dump completed on 2021-08-12 13:32:00
