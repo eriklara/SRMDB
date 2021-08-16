@@ -1179,7 +1179,7 @@ CREATE TABLE `res_user` (
   KEY `res_user_create_uid_index` (`create_uid`) /*!80000 INVISIBLE */,
   KEY `res_user_company_id_fkey_idx` (`company_id`),
   CONSTRAINT `res_user_company_id_fkey` FOREIGN KEY (`company_id`) REFERENCES `res_company` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1188,7 +1188,7 @@ CREATE TABLE `res_user` (
 
 LOCK TABLES `res_user` WRITE;
 /*!40000 ALTER TABLE `res_user` DISABLE KEYS */;
-INSERT INTO `res_user` VALUES (1,'Test4','AD','Test4','Test4','Test4','SRM','Test4','B','2021-08-13 00:00:00','2021-07-12 00:00:00',NULL,NULL,NULL,NULL),(3,'Test7','AD','Test7','Test7','Test7','Test7','Test7','AC','2021-08-13 00:00:00','2021-08-13 00:00:00',1,1,1,1);
+INSERT INTO `res_user` VALUES (1,'Test5','AD','Test5','Test4','Test4','SRM','Test4','BJ','2021-08-16 00:00:00','2021-07-12 00:00:00',NULL,NULL,NULL,NULL),(3,'Test7','AD','Test7','Test7','Test7','Test7','Test7','AC','2021-08-13 00:00:00','2021-08-13 00:00:00',1,1,1,1),(4,'Test8','AD','Test8','Test8','Test8','Test8','Test8','AC','2021-08-16 00:00:00','2021-08-16 00:00:00',1,1,1,1);
 /*!40000 ALTER TABLE `res_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2811,7 +2811,7 @@ BEGIN
 	`position`      = pposition,
 	`status`        = pstatus,
 	`update_date`   = CURDATE()
-	WHERE `id` = 1;
+	WHERE `id` = puser_id;
     
     SELECT "1" as Result;
     
@@ -2831,4 +2831,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-08-15 21:24:31
+-- Dump completed on 2021-08-16  0:56:05
