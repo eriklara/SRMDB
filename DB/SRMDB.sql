@@ -978,11 +978,9 @@ CREATE TABLE `res_address` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   `postal_code` varchar(20) DEFAULT NULL,
-  `address_format` longtext,
-  `address_view_id` int DEFAULT NULL,
-  `phone_code` int DEFAULT NULL,
-  `name_position` varchar(100) DEFAULT NULL,
-  `state_required` tinyint DEFAULT NULL,
+  `latitude` varchar(20) DEFAULT NULL,
+  `longitude` varchar(20) DEFAULT NULL,
+  `phone_number` varchar(10) DEFAULT NULL,
   `region` varchar(100) DEFAULT NULL,
   `city` varchar(100) DEFAULT NULL,
   `description` longtext,
@@ -992,7 +990,7 @@ CREATE TABLE `res_address` (
   PRIMARY KEY (`id`),
   KEY `res_address_create_uid_index` (`create_uid`),
   CONSTRAINT `res_address_create_uid_fkey` FOREIGN KEY (`create_uid`) REFERENCES `res_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1001,6 +999,7 @@ CREATE TABLE `res_address` (
 
 LOCK TABLES `res_address` WRITE;
 /*!40000 ALTER TABLE `res_address` DISABLE KEYS */;
+INSERT INTO `res_address` VALUES (1,'Oficinas OokinSoft','77506','010101,1000','010101,1000','9983226937','Benito Juarez','Cancún','SM 253, MZ 12 LT 21','2021-08-13 00:00:00','2021-08-13 00:00:00',1);
 /*!40000 ALTER TABLE `res_address` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1039,6 +1038,7 @@ CREATE TABLE `res_company` (
 
 LOCK TABLES `res_company` WRITE;
 /*!40000 ALTER TABLE `res_company` DISABLE KEYS */;
+INSERT INTO `res_company` VALUES (1,'AC','OokinSoft','9983226937','OokinSoft@gmail.com','EMP','OokinSoft CV A SV.',1,'OokinSoft CV A SV.','ES una empresa de prueba','2021-08-13 00:00:00',1,'2021-08-13');
 /*!40000 ALTER TABLE `res_company` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1137,7 +1137,7 @@ CREATE TABLE `res_store` (
   KEY `res_store_create_uid_index` (`create_uid`),
   CONSTRAINT `res_store_address_id_fkey` FOREIGN KEY (`address_id`) REFERENCES `res_address` (`id`),
   CONSTRAINT `res_store_create_uid_fkey` FOREIGN KEY (`create_uid`) REFERENCES `res_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1146,6 +1146,7 @@ CREATE TABLE `res_store` (
 
 LOCK TABLES `res_store` WRITE;
 /*!40000 ALTER TABLE `res_store` DISABLE KEYS */;
+INSERT INTO `res_store` VALUES (1,'OokinSoft Oficina 1','AC','9983226937','OokingSoft@gmail.com','12:15:55','12:15:55','10101010101101011, 10101010101','Tienda de pruebas.',1,'2021-08-13 00:00:00','2021-08-13 00:00:00',1);
 /*!40000 ALTER TABLE `res_store` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1178,7 +1179,7 @@ CREATE TABLE `res_user` (
   KEY `res_user_create_uid_index` (`create_uid`) /*!80000 INVISIBLE */,
   KEY `res_user_company_id_fkey_idx` (`company_id`),
   CONSTRAINT `res_user_company_id_fkey` FOREIGN KEY (`company_id`) REFERENCES `res_company` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1187,7 +1188,7 @@ CREATE TABLE `res_user` (
 
 LOCK TABLES `res_user` WRITE;
 /*!40000 ALTER TABLE `res_user` DISABLE KEYS */;
-INSERT INTO `res_user` VALUES (1,'SRM','AD','SRM','SRM','SRM','SRM','SRM','A','2021-08-05 00:00:00','2021-07-12 00:00:00',NULL,NULL,NULL,NULL);
+INSERT INTO `res_user` VALUES (1,'Test4','AD','Test4','Test4','Test4','SRM','Test4','B','2021-08-13 00:00:00','2021-07-12 00:00:00',NULL,NULL,NULL,NULL),(3,'Test7','AD','Test7','Test7','Test7','Test7','Test7','AC','2021-08-13 00:00:00','2021-08-13 00:00:00',1,1,1,1);
 /*!40000 ALTER TABLE `res_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2415,7 +2416,7 @@ UNLOCK TABLES;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SPCREATEUSER`(
-    OUT puser_id INT,
+    IN puser_id INT,
     IN pname varchar(100), 
 	IN pprofile varchar(2), 
 	IN plast_name varchar(100), 
@@ -2427,7 +2428,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SPCREATEUSER`(
 	IN pstore_id int, 
 	IN paddress_id int, 
 	IN pcreate_uid int,
-    OUT pResult INT
+    IN pcompany_id int
 )
 BEGIN
 
@@ -2440,13 +2441,13 @@ BEGIN
 		`user_name`,
 		`password`,
 		`position`,
-		`seller_number`,
 		`status`,
 		`update_date`,
 		`create_date`,
 		`store_id`,
 		`address_id`,
-		`create_uid`
+		`create_uid`,
+        `company_id`
     )
 	VALUES
 	(
@@ -2457,16 +2458,16 @@ BEGIN
 		puser_name,
 		ppassword,
 		pposition,
-		pseller_number,
 		pstatus,
 		curdate(),
 		curdate(),
 		pstore_id,
 		paddress_id,
-		pcreate_uid
+		pcreate_uid,
+        pcompany_id
     );
     
-    SET pResult = 1;
+    SELECT "1" AS Result;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -2505,16 +2506,16 @@ DELIMITER ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SPDELETEUSER`(
-	IN puser_id INT, 
-    OUT pResult INT
+	IN puser_id INT
 )
 BEGIN
-	UPDATE `srmdbv17`.`crm_customer`
-	   SET STATUS  = 'B',
+
+	UPDATE `srmdbv17`.`res_user`
+	   SET STATUS  = 'BJ',
        UPDATE_DATE = CURDATE()
 	WHERE id = puser_id;
 	
-    SET pResult = 1;
+    SELECT "1" AS Result;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -2651,11 +2652,9 @@ BEGIN
            ADS.id              address_id,
            ADS.name            address_name,
            ADS.postal_code     address_postal_Code,
-           ADS.address_format  address_format,
-           ADS.address_view_id  address_view_id,
-           ADS.phone_code      address_phone_code,
-           ADS.name_position   address_name_position,
-           ADS.state_required  address_state_required,
+           ADS.latitude        address_latitude,
+           ADS.longitude       address_longitude,
+           ADS.phone_number    address_phone_number,
            ADS.region          address_region,
            ADS.city            address_city,
            ADS.description     address_description,
@@ -2797,10 +2796,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SPUPDATEUSER`(
 	IN plast_name varchar(100), 
 	IN psur_name varchar(100), 
 	IN puser_name varchar(50), 
-	IN ppassword varchar(50),
     IN pposition varchar(50), 
-	IN pstatus varchar(10), 
-    OUT pResult INT
+	IN pstatus varchar(10)
 )
 BEGIN
 
@@ -2811,14 +2808,12 @@ BEGIN
 	`last_name`     = plast_name,
 	`sur_name`      = psur_name,
 	`user_name`     = puser_name,
-	`password`      = ppassword,
 	`position`      = pposition,
-	`seller_number` = pseller_number,
 	`status`        = pstatus,
 	`update_date`   = CURDATE()
 	WHERE `id` = 1;
-
-    SET pResult = 1;
+    
+    SELECT "1" as Result;
     
 END ;;
 DELIMITER ;
@@ -2836,4 +2831,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-08-12 13:32:00
+-- Dump completed on 2021-08-15 21:24:31
