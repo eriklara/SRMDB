@@ -1112,6 +1112,38 @@ LOCK TABLES `res_image` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `res_session`
+--
+
+DROP TABLE IF EXISTS `res_session`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `res_session` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `key_session` varchar(20) DEFAULT NULL,
+  `create_uid` int DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `company_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `key_session_UNIQUE` (`key_session`),
+  KEY `res_session_company_id_fkey_idx` (`company_id`),
+  KEY `res_session_create_uid_fkey_idx` (`create_uid`),
+  CONSTRAINT `res_session_company_id_fkey` FOREIGN KEY (`company_id`) REFERENCES `res_company` (`id`),
+  CONSTRAINT `res_session_create_uid_fkey` FOREIGN KEY (`create_uid`) REFERENCES `res_user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `res_session`
+--
+
+LOCK TABLES `res_session` WRITE;
+/*!40000 ALTER TABLE `res_session` DISABLE KEYS */;
+INSERT INTO `res_session` VALUES (1,NULL,3,'2021-08-17 17:15:36',1),(2,'SES3170821171735',3,'2021-08-17 17:17:35',1),(3,'SES3170821172716',3,'2021-08-17 17:27:16',1),(4,'SES3170821174514',3,'2021-08-17 17:45:14',1),(5,'SES3170821230113',3,'2021-08-17 23:01:13',1),(6,NULL,NULL,'2021-08-18 13:06:15',NULL),(7,NULL,NULL,'2021-08-18 13:11:42',NULL),(8,'SES3180821131225',3,'2021-08-18 13:12:25',1),(9,NULL,NULL,'2021-08-18 16:18:08',NULL),(10,NULL,NULL,'2021-08-18 16:44:52',NULL),(11,'SES3180821164520',3,'2021-08-18 16:45:20',1),(12,'SES3180821164623',3,'2021-08-18 16:46:23',1),(13,'SES3180821164805',3,'2021-08-18 16:48:05',1),(14,'SES3180821165600',3,'2021-08-18 16:56:00',1),(15,'SES3180821165803',3,'2021-08-18 16:58:03',1),(16,'SES3180821165914',3,'2021-08-18 16:59:14',1),(17,'SES3180821170923',3,'2021-08-18 17:09:23',1),(18,'SES3180821171224',3,'2021-08-18 17:12:24',1),(19,'SES3180821171541',3,'2021-08-18 17:15:41',1),(20,'SES3180821171551',3,'2021-08-18 17:15:51',1),(21,'SES3180821171600',3,'2021-08-18 17:16:00',1),(22,'SES3180821171605',3,'2021-08-18 17:16:05',1),(23,'SES3180821171612',3,'2021-08-18 17:16:12',1),(24,'SES3180821171903',3,'2021-08-18 17:19:03',NULL);
+/*!40000 ALTER TABLE `res_session` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `res_store`
 --
 
@@ -2631,7 +2663,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SPGETUSER`(
 )
 BEGIN
    
-   DECLARE ValidateCompany INT DEFAULT 0;
+   DECLARE ValidateCero INT DEFAULT 0;
 
    -- Creation:   06-08-2021   --
    -- Developer:  Erik Reynoso --
@@ -2644,7 +2676,6 @@ BEGIN
            USR.last_name, 
            USR.sur_name, 
            USR.user_name,
-           USR.password,
            USR.position, 
            USR.status,
 		   USR.update_date,
@@ -2664,13 +2695,20 @@ BEGIN
            CUS.id              create_uid,
            CUS.name            user_name,
            CUS.status          user_status,
-           CUS.profile         user_profile
+           CUS.profile         user_profile,
+           COM.id              company_id,
+           COM.status          company_status,
+           COM.name            company_name,
+           COM.phone_number    company_phone_number,
+           COM.mail            company_mail,
+           COM.business_name   company_business_name
 	 FROM `srmdbv17`.`res_user` USR
 	LEFT JOIN `srmdbv17`.`res_address` ADS ON USR.address_id = ADS.id
     LEFT JOIN `srmdbv17`.`res_store`   STO ON USR.store_id   = STO.id
     LEFT JOIN `srmdbv17`.`res_user`    CUS ON USR.create_uid = CUS.id
+    LEFT JOIN `srmdbv17`.`res_company` COM ON USR.company_id = COM.id
 	WHERE (
-			puser_id IS NULL Or
+			puser_id = ValidateCero Or
 			USR.id = puser_id
 		  ) 
       AND (
@@ -2713,9 +2751,74 @@ BEGIN
 		  )
           )
 	  AND (
-            pcompany_id = ValidateCompany Or 
+            pcompany_id = ValidateCero Or 
             USR.company_id = pcompany_id
           );
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `SPLOGINUSER` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SPLOGINUSER`(
+	IN p_user_name varchar(50),
+	IN p_password  varchar(50)
+)
+BEGIN
+
+	DECLARE v_user_id INT DEFAULT 0;
+	DECLARE v_company_id INT DEFAULT 0;
+    DECLARE v_key_session VARCHAR(50);
+    DECLARE id int;
+    
+    SELECT  USR.id INTO @v_user_id
+	  FROM `srmdbv17`.`res_user` USR
+	 WHERE upper(USR.user_name) = upper(p_user_name)
+       AND USR.password         = p_password;
+    
+    SET @v_key_session = concat('SES', @v_user_id, DATE_FORMAT(NOW( ), "%d%m%y%H%i%S" ));
+  
+	INSERT INTO `srmdbv17`.`res_session`
+    (
+		`id`,
+		`key_session`,
+		`create_uid`,
+		`create_date`,
+		`company_id`
+	)
+	VALUES
+	(
+		@id,
+		@v_key_session,
+		@v_user_id,
+		current_timestamp(),
+		@v_company_id
+	);
+
+    SELECT USR.id          id,
+           USR.name        name,
+           USR.last_name   last_name,
+           USR.sur_name    sur_name,
+           USR.status      status,
+           USR.company_id  company_id,
+           USR.address_id  address_id,
+           USR.store_id    store_id,
+           SES.id          session_id,
+           SES.key_session key_session
+	  FROM `srmdbv17`.`res_user` USR
+      LEFT JOIN `srmdbv17`.`res_session` SES ON USR.id = SES.create_uid
+	 WHERE USR.id          = @v_user_id
+       AND SES.key_session = @v_key_session;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -2831,4 +2934,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-08-16  0:56:05
+-- Dump completed on 2021-08-20 17:15:11
