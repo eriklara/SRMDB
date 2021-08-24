@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.25, for Win64 (x86_64)
 --
--- Host: localhost    Database: srmdbv17
+-- Host: localhost    Database: srmdb
 -- ------------------------------------------------------
 -- Server version	8.0.25
 
@@ -1130,7 +1130,7 @@ CREATE TABLE `res_session` (
   KEY `res_session_create_uid_fkey_idx` (`create_uid`),
   CONSTRAINT `res_session_company_id_fkey` FOREIGN KEY (`company_id`) REFERENCES `res_company` (`id`),
   CONSTRAINT `res_session_create_uid_fkey` FOREIGN KEY (`create_uid`) REFERENCES `res_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1139,7 +1139,7 @@ CREATE TABLE `res_session` (
 
 LOCK TABLES `res_session` WRITE;
 /*!40000 ALTER TABLE `res_session` DISABLE KEYS */;
-INSERT INTO `res_session` VALUES (1,NULL,3,'2021-08-17 17:15:36',1),(2,'SES3170821171735',3,'2021-08-17 17:17:35',1),(3,'SES3170821172716',3,'2021-08-17 17:27:16',1),(4,'SES3170821174514',3,'2021-08-17 17:45:14',1),(5,'SES3170821230113',3,'2021-08-17 23:01:13',1),(6,NULL,NULL,'2021-08-18 13:06:15',NULL),(7,NULL,NULL,'2021-08-18 13:11:42',NULL),(8,'SES3180821131225',3,'2021-08-18 13:12:25',1),(9,NULL,NULL,'2021-08-18 16:18:08',NULL),(10,NULL,NULL,'2021-08-18 16:44:52',NULL),(11,'SES3180821164520',3,'2021-08-18 16:45:20',1),(12,'SES3180821164623',3,'2021-08-18 16:46:23',1),(13,'SES3180821164805',3,'2021-08-18 16:48:05',1),(14,'SES3180821165600',3,'2021-08-18 16:56:00',1),(15,'SES3180821165803',3,'2021-08-18 16:58:03',1),(16,'SES3180821165914',3,'2021-08-18 16:59:14',1),(17,'SES3180821170923',3,'2021-08-18 17:09:23',1),(18,'SES3180821171224',3,'2021-08-18 17:12:24',1),(19,'SES3180821171541',3,'2021-08-18 17:15:41',1),(20,'SES3180821171551',3,'2021-08-18 17:15:51',1),(21,'SES3180821171600',3,'2021-08-18 17:16:00',1),(22,'SES3180821171605',3,'2021-08-18 17:16:05',1),(23,'SES3180821171612',3,'2021-08-18 17:16:12',1),(24,'SES3180821171903',3,'2021-08-18 17:19:03',NULL);
+INSERT INTO `res_session` VALUES (1,NULL,3,'2021-08-17 17:15:36',1),(2,'SES3170821171735',3,'2021-08-17 17:17:35',1),(3,'SES3170821172716',3,'2021-08-17 17:27:16',1),(4,'SES3170821174514',3,'2021-08-17 17:45:14',1),(5,'SES3170821230113',3,'2021-08-17 23:01:13',1),(6,NULL,NULL,'2021-08-18 13:06:15',NULL),(7,NULL,NULL,'2021-08-18 13:11:42',NULL),(8,'SES3180821131225',3,'2021-08-18 13:12:25',1),(9,NULL,NULL,'2021-08-18 16:18:08',NULL),(10,NULL,NULL,'2021-08-18 16:44:52',NULL),(11,'SES3180821164520',3,'2021-08-18 16:45:20',1),(12,'SES3180821164623',3,'2021-08-18 16:46:23',1),(13,'SES3180821164805',3,'2021-08-18 16:48:05',1),(14,'SES3180821165600',3,'2021-08-18 16:56:00',1),(15,'SES3180821165803',3,'2021-08-18 16:58:03',1),(16,'SES3180821165914',3,'2021-08-18 16:59:14',1),(17,'SES3180821170923',3,'2021-08-18 17:09:23',1),(18,'SES3180821171224',3,'2021-08-18 17:12:24',1),(19,'SES3180821171541',3,'2021-08-18 17:15:41',1),(20,'SES3180821171551',3,'2021-08-18 17:15:51',1),(21,'SES3180821171600',3,'2021-08-18 17:16:00',1),(22,'SES3180821171605',3,'2021-08-18 17:16:05',1),(23,'SES3180821171612',3,'2021-08-18 17:16:12',1),(24,'SES3180821171903',3,'2021-08-18 17:19:03',NULL),(25,'SES1200821230521',1,'2021-08-20 23:05:21',1),(26,'SES1200821230619',1,'2021-08-20 23:06:19',1),(27,'SES3200821232423',3,'2021-08-20 23:24:23',NULL),(28,'SES3200821232445',3,'2021-08-20 23:24:45',NULL);
 /*!40000 ALTER TABLE `res_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2435,7 +2435,7 @@ LOCK TABLES `stock_warehouse` WRITE;
 UNLOCK TABLES;
 
 --
--- Dumping routines for database 'srmdbv17'
+-- Dumping routines for database 'srmdb'
 --
 /*!50003 DROP PROCEDURE IF EXISTS `SPCREATEUSER` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -2464,7 +2464,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SPCREATEUSER`(
 )
 BEGIN
 
-	INSERT INTO `srmdbv17`.`res_user`
+	INSERT INTO `srmdb`.`res_user`
 	(
 		`name`,
 		`profile`,
@@ -2518,7 +2518,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SPDELETECUSTOMER`(IN pcustomer_id INT)
 BEGIN
-	UPDATE `srmdbv17`.`crm_customer`
+	UPDATE `srmdb`.`crm_customer`
 	SET  STATUS = 'B'
     WHERE id = pcustomer_id;
 END ;;
@@ -2542,7 +2542,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SPDELETEUSER`(
 )
 BEGIN
 
-	UPDATE `srmdbv17`.`res_user`
+	UPDATE `srmdb`.`res_user`
 	   SET STATUS  = 'BJ',
        UPDATE_DATE = CURDATE()
 	WHERE id = puser_id;
@@ -2623,12 +2623,12 @@ BEGIN
            USR.profile         user_profile,
            USC.id              user_code_id,
            USC.user_name       customer_user_name
-	 FROM `srmdbv17`.`crm_customer` CUS
-	INNER JOIN  `srmdbv17`.`res_address` ADS ON CUS.address_id   = ADS.id
-    INNER JOIN  `srmdbv17`.`sale_card`   CAR ON CUS.card_id      = CAR.id 
-    INNER JOIN  `srmdbv17`.`res_store`   STO ON CUS.store_id     = STO.id
-    INNER JOIN  `srmdbv17`.`res_user`    USR ON CUS.create_uid   = USR.id
-    INNER JOIN  `srmdbv17`.`res_user`    USC ON CUS.user_code_id = USC.id
+	 FROM `srmdb`.`crm_customer` CUS
+	INNER JOIN  `srmdb`.`res_address` ADS ON CUS.address_id   = ADS.id
+    INNER JOIN  `srmdb`.`sale_card`   CAR ON CUS.card_id      = CAR.id 
+    INNER JOIN  `srmdb`.`res_store`   STO ON CUS.store_id     = STO.id
+    INNER JOIN  `srmdb`.`res_user`    USR ON CUS.create_uid   = USR.id
+    INNER JOIN  `srmdb`.`res_user`    USC ON CUS.user_code_id = USC.id
 	WHERE CUS.id = pcustomer_id
       AND CUS.status = pstatus;
 
@@ -2702,11 +2702,11 @@ BEGIN
            COM.phone_number    company_phone_number,
            COM.mail            company_mail,
            COM.business_name   company_business_name
-	 FROM `srmdbv17`.`res_user` USR
-	LEFT JOIN `srmdbv17`.`res_address` ADS ON USR.address_id = ADS.id
-    LEFT JOIN `srmdbv17`.`res_store`   STO ON USR.store_id   = STO.id
-    LEFT JOIN `srmdbv17`.`res_user`    CUS ON USR.create_uid = CUS.id
-    LEFT JOIN `srmdbv17`.`res_company` COM ON USR.company_id = COM.id
+	 FROM `srmdb`.`res_user` USR
+	LEFT JOIN `srmdb`.`res_address` ADS ON USR.address_id = ADS.id
+    LEFT JOIN `srmdb`.`res_store`   STO ON USR.store_id   = STO.id
+    LEFT JOIN `srmdb`.`res_user`    CUS ON USR.create_uid = CUS.id
+    LEFT JOIN `srmdb`.`res_company` COM ON USR.company_id = COM.id
 	WHERE (
 			puser_id = ValidateCero Or
 			USR.id = puser_id
@@ -2782,13 +2782,17 @@ BEGIN
     DECLARE id int;
     
     SELECT  USR.id INTO @v_user_id
-	  FROM `srmdbv17`.`res_user` USR
+	  FROM `srmdb`.`res_user` USR
 	 WHERE upper(USR.user_name) = upper(p_user_name)
        AND USR.password         = p_password;
+	
+	SELECT  USR.company_id INTO @v_company_id
+	  FROM `srmdb`.`res_user` USR
+	 WHERE USR.id = @v_user_id;
     
     SET @v_key_session = concat('SES', @v_user_id, DATE_FORMAT(NOW( ), "%d%m%y%H%i%S" ));
   
-	INSERT INTO `srmdbv17`.`res_session`
+	INSERT INTO `srmdb`.`res_session`
     (
 		`id`,
 		`key_session`,
@@ -2815,8 +2819,8 @@ BEGIN
            USR.store_id    store_id,
            SES.id          session_id,
            SES.key_session key_session
-	  FROM `srmdbv17`.`res_user` USR
-      LEFT JOIN `srmdbv17`.`res_session` SES ON USR.id = SES.create_uid
+	  FROM `srmdb`.`res_user` USR
+      LEFT JOIN `srmdb`.`res_session` SES ON USR.id = SES.create_uid
 	 WHERE USR.id          = @v_user_id
        AND SES.key_session = @v_key_session;
 END ;;
@@ -2855,7 +2859,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SPUPDATECUSTOMER`(
 )
 BEGIN
 
-	UPDATE `srmdbv17`.`crm_customer`
+	UPDATE `srmdb`.`crm_customer`
 	SET
 		name            = pname,
 		last_name       = plast_name,
@@ -2904,7 +2908,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SPUPDATEUSER`(
 )
 BEGIN
 
-    UPDATE `srmdbv17`.`res_user`
+    UPDATE `srmdb`.`res_user`
 	SET
 	`name`          = pname,
 	`profile`       = pprofile,
@@ -2934,4 +2938,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-08-20 17:15:11
+-- Dump completed on 2021-08-24  0:08:34
