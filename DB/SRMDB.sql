@@ -1081,6 +1081,30 @@ LOCK TABLES `res_currency` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `res_error_log`
+--
+
+DROP TABLE IF EXISTS `res_error_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `res_error_log` (
+  `id` int NOT NULL,
+  `key` varchar(45) DEFAULT NULL,
+  `json` longtext,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `res_error_log`
+--
+
+LOCK TABLES `res_error_log` WRITE;
+/*!40000 ALTER TABLE `res_error_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `res_error_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `res_image`
 --
 
@@ -1112,6 +1136,30 @@ LOCK TABLES `res_image` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `res_information_log`
+--
+
+DROP TABLE IF EXISTS `res_information_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `res_information_log` (
+  `id` int NOT NULL,
+  `key` varchar(45) DEFAULT NULL,
+  `json` longtext,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `res_information_log`
+--
+
+LOCK TABLES `res_information_log` WRITE;
+/*!40000 ALTER TABLE `res_information_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `res_information_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `res_session`
 --
 
@@ -1124,6 +1172,7 @@ CREATE TABLE `res_session` (
   `create_uid` int DEFAULT NULL,
   `create_date` datetime DEFAULT NULL,
   `company_id` int DEFAULT NULL,
+  `status` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `key_session_UNIQUE` (`key_session`),
   KEY `res_session_company_id_fkey_idx` (`company_id`),
@@ -1139,7 +1188,7 @@ CREATE TABLE `res_session` (
 
 LOCK TABLES `res_session` WRITE;
 /*!40000 ALTER TABLE `res_session` DISABLE KEYS */;
-INSERT INTO `res_session` VALUES (1,NULL,3,'2021-08-17 17:15:36',1),(2,'SES3170821171735',3,'2021-08-17 17:17:35',1),(3,'SES3170821172716',3,'2021-08-17 17:27:16',1),(4,'SES3170821174514',3,'2021-08-17 17:45:14',1),(5,'SES3170821230113',3,'2021-08-17 23:01:13',1),(6,NULL,NULL,'2021-08-18 13:06:15',NULL),(7,NULL,NULL,'2021-08-18 13:11:42',NULL),(8,'SES3180821131225',3,'2021-08-18 13:12:25',1),(9,NULL,NULL,'2021-08-18 16:18:08',NULL),(10,NULL,NULL,'2021-08-18 16:44:52',NULL),(11,'SES3180821164520',3,'2021-08-18 16:45:20',1),(12,'SES3180821164623',3,'2021-08-18 16:46:23',1),(13,'SES3180821164805',3,'2021-08-18 16:48:05',1),(14,'SES3180821165600',3,'2021-08-18 16:56:00',1),(15,'SES3180821165803',3,'2021-08-18 16:58:03',1),(16,'SES3180821165914',3,'2021-08-18 16:59:14',1),(17,'SES3180821170923',3,'2021-08-18 17:09:23',1),(18,'SES3180821171224',3,'2021-08-18 17:12:24',1),(19,'SES3180821171541',3,'2021-08-18 17:15:41',1),(20,'SES3180821171551',3,'2021-08-18 17:15:51',1),(21,'SES3180821171600',3,'2021-08-18 17:16:00',1),(22,'SES3180821171605',3,'2021-08-18 17:16:05',1),(23,'SES3180821171612',3,'2021-08-18 17:16:12',1),(24,'SES3180821171903',3,'2021-08-18 17:19:03',NULL),(25,'SES1200821230521',1,'2021-08-20 23:05:21',1),(26,'SES1200821230619',1,'2021-08-20 23:06:19',1),(27,'SES3200821232423',3,'2021-08-20 23:24:23',NULL),(28,'SES3200821232445',3,'2021-08-20 23:24:45',NULL);
+INSERT INTO `res_session` VALUES (1,NULL,3,'2021-08-17 17:15:36',1,NULL),(2,'SES3170821171735',3,'2021-08-17 17:17:35',1,NULL),(3,'SES3170821172716',3,'2021-08-17 17:27:16',1,NULL),(4,'SES3170821174514',3,'2021-08-17 17:45:14',1,NULL),(5,'SES3170821230113',3,'2021-08-17 23:01:13',1,NULL),(6,NULL,NULL,'2021-08-18 13:06:15',NULL,NULL),(7,NULL,NULL,'2021-08-18 13:11:42',NULL,NULL),(8,'SES3180821131225',3,'2021-08-18 13:12:25',1,NULL),(9,NULL,NULL,'2021-08-18 16:18:08',NULL,NULL),(10,NULL,NULL,'2021-08-18 16:44:52',NULL,NULL),(11,'SES3180821164520',3,'2021-08-18 16:45:20',1,NULL),(12,'SES3180821164623',3,'2021-08-18 16:46:23',1,NULL),(13,'SES3180821164805',3,'2021-08-18 16:48:05',1,NULL),(14,'SES3180821165600',3,'2021-08-18 16:56:00',1,NULL),(15,'SES3180821165803',3,'2021-08-18 16:58:03',1,NULL),(16,'SES3180821165914',3,'2021-08-18 16:59:14',1,NULL),(17,'SES3180821170923',3,'2021-08-18 17:09:23',1,NULL),(18,'SES3180821171224',3,'2021-08-18 17:12:24',1,NULL),(19,'SES3180821171541',3,'2021-08-18 17:15:41',1,NULL),(20,'SES3180821171551',3,'2021-08-18 17:15:51',1,NULL),(21,'SES3180821171600',3,'2021-08-18 17:16:00',1,NULL),(22,'SES3180821171605',3,'2021-08-18 17:16:05',1,NULL),(23,'SES3180821171612',3,'2021-08-18 17:16:12',1,NULL),(24,'SES3180821171903',3,'2021-08-18 17:19:03',NULL,NULL),(25,'SES1200821230521',1,'2021-08-20 23:05:21',1,NULL),(26,'SES1200821230619',1,'2021-08-20 23:06:19',1,NULL),(27,'SES3200821232423',3,'2021-08-20 23:24:23',NULL,NULL),(28,'SES3200821232445',3,'2021-08-20 23:24:45',NULL,NULL);
 /*!40000 ALTER TABLE `res_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1180,6 +1229,30 @@ LOCK TABLES `res_store` WRITE;
 /*!40000 ALTER TABLE `res_store` DISABLE KEYS */;
 INSERT INTO `res_store` VALUES (1,'OokinSoft Oficina 1','AC','9983226937','OokingSoft@gmail.com','12:15:55','12:15:55','10101010101101011, 10101010101','Tienda de pruebas.',1,'2021-08-13 00:00:00','2021-08-13 00:00:00',1);
 /*!40000 ALTER TABLE `res_store` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `res_success_log`
+--
+
+DROP TABLE IF EXISTS `res_success_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `res_success_log` (
+  `id` int NOT NULL,
+  `key` varchar(45) NOT NULL,
+  `json` longtext NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `res_success_log`
+--
+
+LOCK TABLES `res_success_log` WRITE;
+/*!40000 ALTER TABLE `res_success_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `res_success_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -2437,6 +2510,101 @@ UNLOCK TABLES;
 --
 -- Dumping routines for database 'srmdb'
 --
+/*!50003 DROP PROCEDURE IF EXISTS `SPCREATECUSTOMER` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SPCREATECUSTOMER`(
+    IN pcustomer_id     int,
+    IN    pcustomer_key    varchar(45),
+    IN    pname            varchar(100),
+    IN    plast_name       varchar(100),
+	IN    psur_name        varchar(100),
+	IN    pcustomer_number varchar(20),
+	IN    ptype            varchar(50),
+	IN    pdate_birth      datetime,
+	IN    pgender          varchar(3),
+	IN    pRFC             varchar(20),
+	IN    pbusiness_name   varchar(100),
+	IN    pprofession      varchar(250),
+	IN    pphone_number    varchar(20),   
+	IN    pmail            varchar(100),
+    IN    pdescription     varchar(1000),
+	IN    paddress_id      int,
+	IN    puser_code_id     int,
+    IN    pcard_id          int,
+	IN    pstore_id        int, 
+	IN    pcreate_uid      int,
+    IN    pcompany_id      int
+)
+BEGIN
+
+	INSERT INTO `srmdb`.`crm_customer`
+	(
+		`id`,
+		`customer_key`,
+		`name`,
+		`last_name`,
+		`sur_name`,
+		`customer_number`,
+		`type`,
+		`status`,
+		`date_birth`,
+		`gender`,
+		`RFC`,
+		`business_name`,
+		`profession`,
+		`phone_number`,
+		`mail`,
+		`description`,
+		`update_date`,
+		`address_id`,
+		`user_code_id`,
+		`card_id`,
+		`store_id`,
+		`create_uid`,
+		`create_date`
+    )
+	VALUES
+	(
+		pcustomer_id,
+		pcustomer_key,
+		pname,
+		plast_name,
+		psur_name,
+		pcustomer_number,
+		ptype,
+		'AC',
+		pdate_birth,
+		pgender,
+		pRFC,
+		pbusiness_name,
+		pprofession,
+		pphone_number,
+		pmail,
+		pdescription,
+		curdate(),
+		paddress_id,
+		puser_code_id,
+		pcard_id,
+		pstore_id,
+		pcreate_uid,
+		curdate()
+    );
+    SELECT pcustomer_id = LAST_INSERT_ID();
+    
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `SPCREATEUSER` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -2448,19 +2616,19 @@ UNLOCK TABLES;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SPCREATEUSER`(
-    IN puser_id INT,
-    IN pname varchar(100), 
-	IN pprofile varchar(2), 
-	IN plast_name varchar(100), 
-	IN psur_name varchar(100), 
-	IN puser_name varchar(50), 
-	IN ppassword varchar(50),
-    IN pposition varchar(50),
-	IN pstatus varchar(10), 
-	IN pstore_id int, 
-	IN paddress_id int, 
-	IN pcreate_uid int,
-    IN pcompany_id int
+    INOUT puser_id    int,
+    IN    pname       varchar(100), 
+	IN    pprofile    varchar(2), 
+	IN    plast_name  varchar(100), 
+	IN    psur_name   varchar(100), 
+	IN    puser_name  varchar(50), 
+	IN    ppassword   varchar(50),
+    IN    pposition   varchar(50),
+	IN    pstatus     varchar(10), 
+	IN    pstore_id   int, 
+	IN    paddress_id int, 
+	IN    pcreate_uid int,
+    IN    pcompany_id int
 )
 BEGIN
 
@@ -2498,8 +2666,8 @@ BEGIN
 		pcreate_uid,
         pcompany_id
     );
+    SELECT puser_id = LAST_INSERT_ID();
     
-    SELECT "1" AS Result;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -2938,4 +3106,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-08-24  0:08:34
+-- Dump completed on 2021-10-14  3:52:49
