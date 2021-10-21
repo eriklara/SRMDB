@@ -2508,6 +2508,10 @@ LOCK TABLES `stock_warehouse` WRITE;
 UNLOCK TABLES;
 
 --
+-- Dumping events for database 'srmdb'
+--
+
+--
 -- Dumping routines for database 'srmdb'
 --
 /*!50003 DROP PROCEDURE IF EXISTS `SPCREATECUSTOMER` */;
@@ -2544,61 +2548,188 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SPCREATECUSTOMER`(
     IN    pcompany_id      int
 )
 BEGIN
-
-	INSERT INTO `srmdb`.`crm_customer`
-	(
-		`id`,
-		`customer_key`,
-		`name`,
-		`last_name`,
-		`sur_name`,
-		`customer_number`,
-		`type`,
-		`status`,
-		`date_birth`,
-		`gender`,
-		`RFC`,
-		`business_name`,
-		`profession`,
-		`phone_number`,
-		`mail`,
-		`description`,
-		`update_date`,
-		`address_id`,
-		`user_code_id`,
-		`card_id`,
-		`store_id`,
-		`create_uid`,
-		`create_date`
-    )
-	VALUES
-	(
-		pcustomer_id,
-		pcustomer_key,
-		pname,
-		plast_name,
-		psur_name,
-		pcustomer_number,
-		ptype,
-		'AC',
-		pdate_birth,
-		pgender,
-		pRFC,
-		pbusiness_name,
-		pprofession,
-		pphone_number,
-		pmail,
-		pdescription,
-		curdate(),
-		paddress_id,
-		puser_code_id,
-		pcard_id,
-		pstore_id,
-		pcreate_uid,
-		curdate()
-    );
-    SELECT pcustomer_id = LAST_INSERT_ID();
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+		SHOW ERRORS LIMIT 1;
+        RESIGNAL;
+		ROLLBACK;
+    END;
     
+	START TRANSACTION;
+		INSERT INTO `srmdb`.`crm_customer`
+		(
+			`id`,
+			`customer_key`,
+			`name`,
+			`last_name`,
+			`sur_name`,
+			`customer_number`,
+			`type`,
+			`status`,
+			`date_birth`,
+			`gender`,
+			`RFC`,
+			`business_name`,
+			`profession`,
+			`phone_number`,
+			`mail`,
+			`description`,
+			`update_date`,
+			`address_id`,
+			`user_code_id`,
+			`card_id`,
+			`store_id`,
+			`create_uid`,
+			`create_date`
+		)
+		VALUES
+		(
+			pcustomer_id,
+			pcustomer_key,
+			pname,
+			plast_name,
+			psur_name,
+			pcustomer_number,
+			ptype,
+			'AC',
+			pdate_birth,
+			pgender,
+			pRFC,
+			pbusiness_name,
+			pprofession,
+			pphone_number,
+			pmail,
+			pdescription,
+			curdate(),
+			paddress_id,
+			puser_code_id,
+			pcard_id,
+			pstore_id,
+			pcreate_uid,
+			curdate()
+		);
+		SELECT pcustomer_id = LAST_INSERT_ID();
+    COMMIT;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `SPCREATEERRORLOG` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SPCREATEERRORLOG`(
+	IN PKEYLOG VARCHAR(45),
+    IN PJSON   LONGTEXT
+)
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		SHOW ERRORS LIMIT 1;
+		RESIGNAL;
+		ROLLBACK;
+	END;
+		
+	START TRANSACTION;
+		INSERT INTO `srmdb`.`res_error_log`
+		(
+			`key`,
+			`json`
+		)
+		VALUES
+		(
+			PKEYLOG,
+			PJSON
+		);
+	COMMIT;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `SPCREATEINFORMATIONLOG` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SPCREATEINFORMATIONLOG`(
+	IN PKEYLOG VARCHAR(45),
+    IN PJSON   LONGTEXT
+)
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		SHOW ERRORS LIMIT 1;
+		RESIGNAL;
+		ROLLBACK;
+	END;
+		
+	START TRANSACTION;
+		INSERT INTO `srmdb`.`res_information_log`
+		(
+			`key`,
+			`json`
+		)
+		VALUES
+		(
+			PKEYLOG,
+			PJSON
+		);
+	COMMIT;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `SPCREATESUCCESSLOG` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SPCREATESUCCESSLOG`(
+	IN PKEYLOG VARCHAR(45),
+    IN PJSON   LONGTEXT
+)
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		SHOW ERRORS LIMIT 1;
+		RESIGNAL;
+		ROLLBACK;
+	END;
+		
+	START TRANSACTION;
+		INSERT INTO `srmdb`.`res_success_log`
+		(
+			`key`,
+			`json`
+		)
+		VALUES
+		(
+			PKEYLOG,
+			PJSON
+		);
+	COMMIT;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -3106,4 +3237,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-10-14  3:52:49
+-- Dump completed on 2021-10-20 22:41:47
